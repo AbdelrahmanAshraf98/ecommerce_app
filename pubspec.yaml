@@ -22,6 +22,7 @@ dependencies:
   conditional: ^0.0.1
   fluttertoast: ^8.0.6
   carousel_slider: ^3.0.0
+  conditional_builder: ^1.0.2
 
 
 

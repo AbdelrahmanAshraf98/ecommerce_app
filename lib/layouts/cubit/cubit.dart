@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layouts/cubit/states.dart';
+import 'package:shop_app/models/categories_model.dart';
+import 'package:shop_app/models/favourites_model.dart';
 import 'package:shop_app/models/home_model.dart';
 import 'package:shop_app/modules/categories/categories_screen.dart';
 import 'package:shop_app/modules/favourites/favourites_screen.dart';
@@ -29,6 +31,7 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeChangeBottomNav());
   }
 
+  Map<int, bool> fav = {};
   HomeModel homeModel;
 
   void getHomeData() {
@@ -38,10 +41,67 @@ class HomeCubit extends Cubit<HomeStates> {
       token: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
-      print(homeModel.data.banners[0].image);
+      homeModel.data.products.forEach((element) {
+        fav.addAll({
+          element.id: element.inFavorites,
+        });
+      });
       emit(HomeSuccessDataState());
     }).catchError((error) {
       print(error.toString());
+      emit(HomeErrorDataState());
+    });
+  }
+
+  CategoriesModel categoriesModel;
+
+  void getCategoriesData() {
+    emit(CategoriesLoadingDataState());
+    DioHelper.getData(
+      url: 'categories',
+      token: token,
+    ).then((value) {
+      categoriesModel = CategoriesModel.fromJson(value.data);
+      emit(CategoriesSuccessDataState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(CategoriesErrorDataState());
+    });
+  }
+
+  FavouritesModel favouritesModel;
+
+  void getFavouritesData() {
+    emit(FavouritesLoadingDataState());
+    DioHelper.getData(
+      url: 'favorites',
+      token: token,
+    ).then((value) {
+      favouritesModel = FavouritesModel.fromJson(value.data);
+      // print(favouritesModel.data.items[0].product.name);
+      emit(FavouritesSuccessDataState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(FavouritesErrorDataState());
+    });
+  }
+
+  ChangeFavouritesModel favModel;
+
+  void changeFav(int id) {
+    fav[id] =! fav[id];
+    emit(ChangeFavLoadingDataState());
+    DioHelper.postData(url: 'favorites', data: {'product_id': id}, token: token)
+        .then((value) {
+      favModel = ChangeFavouritesModel.fromJson(value.data);
+      if(!favModel.status)
+        fav[id] =! fav[id];
+      getFavouritesData();
+      emit(ChangeFavSuccessDataState(favModel));
+    }).catchError((error) {
+      fav[id] =! fav[id];
+      print(error.toString());
+      emit(ChangeFavErrorDataState());
     });
   }
 }
