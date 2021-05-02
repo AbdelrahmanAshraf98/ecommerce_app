@@ -29,8 +29,8 @@ class LoginCubit extends Cubit<LoginStates> {
       loginModel = LoginModel.fromJson(value.data);
       HomeCubit.get(context).changeBottom(0);
       print(loginModel.message);
+
       emit(LoginSuccessState(loginModel));
-      HomeCubit.get(context).getUserData();
     }).catchError((error){
       emit(LoginErrorState(error.toString()));
     });

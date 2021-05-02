@@ -12,6 +12,7 @@ import 'package:shop_app/shared/styles/color.dart';
 import 'layouts/home_layout.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
@@ -28,6 +29,7 @@ void main() async {
     widgetScreen = OnBoardingScreen();
 
   runApp(MyApp(
+    Token:token,
     onBoarding: onBoarding,
     widgetScreen: widgetScreen,
   ));
@@ -35,16 +37,17 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   bool onBoarding;
+  String Token;
   Widget widgetScreen;
-  MyApp({this.onBoarding, this.widgetScreen});
+  MyApp({this.onBoarding, this.widgetScreen,this.Token});
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeCubit()
-        ..getHomeData()
-        ..getCategoriesData()
-        ..getFavouritesData()
-        ..getUserData(),
+        ..getHomeData(Token)
+        ..getCategoriesData(Token)
+        ..getFavouritesData(Token)
+        ..getUserData(Token),
       child: MaterialApp(
         theme: ThemeData(
             fontFamily: 'Jannah',

@@ -171,7 +171,7 @@ Widget productsBuilder(HomeModel model, context, CategoriesModel cModel) =>
                                       ),
                                     ),
                                     onPressed: () {
-                                      HomeCubit.get(context).changeFav(model.data.products[index].id);
+                                      HomeCubit.get(context).changeFav(model.data.products[index].id,token);
                                     })
                               ],
                             ),

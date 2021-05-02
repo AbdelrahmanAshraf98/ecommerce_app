@@ -33,6 +33,9 @@ class RegisterCubit extends Cubit<RegisterStates> {
       registerModel = LoginModel.fromJson(value.data);
       HomeCubit.get(context).changeBottom(0);
       print(registerModel.message);
+      HomeCubit.get(context).getUserData(registerModel.data.token);
+      HomeCubit.get(context).getHomeData(registerModel.data.token);
+      HomeCubit.get(context).getFavouritesData(registerModel.data.token);
       emit(RegisterSuccessState(registerModel));
     }).catchError((error) {
       emit(RegisterErrorState(error.toString()));

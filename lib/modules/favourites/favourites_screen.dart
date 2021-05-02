@@ -137,7 +137,9 @@ Widget buildFavItem(FavouritesModel model, int index, context) => Padding(
                           ),
                           onPressed: () {
                             HomeCubit.get(context)
-                                .changeFav(model.data.items[index].product.id);
+                                .changeFav(model.data.items[index].product.id,
+                                token,
+                            );
                           })
                     ],
                   ),

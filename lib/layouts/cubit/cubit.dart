@@ -35,7 +35,7 @@ class HomeCubit extends Cubit<HomeStates> {
   Map<int, bool> fav = {};
   HomeModel homeModel;
 
-  void getHomeData() {
+  void getHomeData(String token) {
     emit(HomeLoadingDataState());
     DioHelper.getData(
       url: 'home',
@@ -56,7 +56,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   CategoriesModel categoriesModel;
 
-  void getCategoriesData() {
+  void getCategoriesData(String token) {
     emit(CategoriesLoadingDataState());
     DioHelper.getData(
       url: 'categories',
@@ -72,7 +72,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   FavouritesModel favouritesModel;
 
-  void getFavouritesData() {
+  void getFavouritesData(String token) {
     emit(FavouritesLoadingDataState());
     DioHelper.getData(
       url: 'favorites',
@@ -88,7 +88,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   ChangeFavouritesModel favModel;
 
-  void changeFav(int id) {
+  void changeFav(int id,String token) {
     fav[id] =! fav[id];
     emit(ChangeFavLoadingDataState());
     DioHelper.postData(url: 'favorites', data: {'product_id': id}, token: token)
@@ -96,7 +96,7 @@ class HomeCubit extends Cubit<HomeStates> {
       favModel = ChangeFavouritesModel.fromJson(value.data);
       if(!favModel.status)
         fav[id] =! fav[id];
-      getFavouritesData();
+      getFavouritesData(token);
       emit(ChangeFavSuccessDataState(favModel));
     }).catchError((error) {
       fav[id] =! fav[id];
@@ -106,7 +106,7 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   LoginModel userModel;
-  void getUserData() {
+  void getUserData(String token) {
     emit(UserLoadingDataState());
     DioHelper.getData(
       url: 'profile',
@@ -124,6 +124,7 @@ class HomeCubit extends Cubit<HomeStates> {
     @required String name,
     @required String email,
     @required String phone,
+    String token,
 }) {
     emit(UserLoadingUpdateDataState());
     DioHelper.putData(

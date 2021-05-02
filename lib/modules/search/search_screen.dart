@@ -6,6 +6,7 @@ import 'package:shop_app/models/search_model.dart';
 import 'package:shop_app/modules/search/cubit/cubit.dart';
 import 'package:shop_app/modules/search/cubit/states.dart';
 import 'package:shop_app/shared/components/components.dart';
+import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/styles/color.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class SearchScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(),
             body: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(left: 20.0,top: 20.0,right: 20.0),
               child: Form(
                 key: formKey,
                 child: Column(
@@ -42,7 +43,7 @@ class SearchScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0),
                     if(state is SearchLoadingState)
-                    LinearProgressIndicator(),
+                    LinearProgressIndicator(backgroundColor: kPrimaryColor,),
                     Expanded(
                       child: Container(
                         child: ConditionalBuilder(
@@ -77,6 +78,7 @@ class SearchScreen extends StatelessWidget {
     );
   }
 }
+
 Widget emptyFav() => Center(
   child: Container(
     child: Column(
@@ -88,6 +90,7 @@ Widget emptyFav() => Center(
         ]),
   ),
 );
+
 Widget buildFavItem(SearchModel model, int index, context) => Padding(
   padding: const EdgeInsets.all(20.0),
   child: Container(
@@ -152,7 +155,7 @@ Widget buildFavItem(SearchModel model, int index, context) => Padding(
                       ),
                       onPressed: () {
                         HomeCubit.get(context)
-                            .changeFav(model.data.items[index].id);
+                            .changeFav(model.data.items[index].id,token);
                       })
                 ],
               ),

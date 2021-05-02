@@ -22,81 +22,84 @@ class OnBoardingScreen extends StatelessWidget {
   List<BoardingModel> boarding = [
     BoardingModel(
       image: 'assets/images/empty_cart.png',
-      title: 'On Board 1 Title',
-      body: 'On Board 1 Body',
+      title: 'احصل علي كل ما تريد الآن',
+      body: 'احصل علي كل ما في قائمة طلباتك',
     ),
     BoardingModel(
       image: 'assets/images/online_groceries.png',
-      title: 'On Board 2 Title',
-      body: 'On Board 2 Body',
+      title: 'احصلي علي كافة سلع للمنزل',
+      body: 'جميع السلع المنزلية بارخص الاسعار',
     ),
     BoardingModel(
       image: 'assets/images/shopping_app.png',
-      title: 'On Board 3 Title',
-      body: 'On Board 3 Body',
+      title: 'تسوقي من بيتك',
+      body: 'احصلي علي جميع المنتجات بدون عناء',
     )
   ];
   var boardController = PageController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-        backwardsCompatibility: false,
-        actions :[
-          TextButton(onPressed: () {
-            CacheHelper.saveData(key: 'onBoard', value: true).then((value) =>
-                navigateAndFinish(context, LoginScreen()));
-          },
-            child: Text('SKIP',style: TextStyle(color: kPrimaryColor),),),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView.builder(
-                controller: boardController,
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) =>
-                    buildBoardingItem(boarding[index]),
-                itemCount: 3,
-              ),
-            ),
-            Row(
-              children: [
-                SmoothPageIndicator(
-                  controller: boardController,
-                  count: 3,
-                  effect: ExpandingDotsEffect(
-                      activeDotColor: kPrimaryColor,
-                      dotColor: Colors.grey,
-                      dotHeight: 10,
-                      dotWidth: 10,
-                      expansionFactor: 4),
-                ),
-                Spacer(),
-                FloatingActionButton(
-                  backgroundColor: kPrimaryColor,
-                  onPressed: () {
-                    if (boardController.page == 2){
-                      CacheHelper.saveData(key: 'onBoard', value: true).then((value) =>
-                          navigateAndFinish(context, LoginScreen()));
-                    }
-                    boardController.nextPage(
-                      duration: Duration(milliseconds: 750),
-                      curve: Curves.fastLinearToSlowEaseIn,
-                    );
-                  },
-                  child: Icon(Icons.arrow_forward_ios),
-                ),
-              ],
-            )
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+          backwardsCompatibility: false,
+          actions :[
+            TextButton(onPressed: () {
+              CacheHelper.saveData(key: 'onBoard', value: true).then((value) =>
+                  navigateAndFinish(context, LoginScreen()));
+            },
+              child: Text('تخطي',style: TextStyle(color: kPrimaryColor),),),
           ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: PageView.builder(
+                  controller: boardController,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context, index) =>
+                      buildBoardingItem(boarding[index]),
+                  itemCount: 3,
+                ),
+              ),
+              Row(
+                children: [
+                  SmoothPageIndicator(
+                    controller: boardController,
+                    count: 3,
+                    effect: ExpandingDotsEffect(
+                        activeDotColor: kPrimaryColor,
+                        dotColor: Colors.grey,
+                        dotHeight: 10,
+                        dotWidth: 10,
+                        expansionFactor: 4),
+                  ),
+                  Spacer(),
+                  FloatingActionButton(
+                    backgroundColor: kPrimaryColor,
+                    onPressed: () {
+                      if (boardController.page == 2){
+                        CacheHelper.saveData(key: 'onBoard', value: true).then((value) =>
+                            navigateAndFinish(context, LoginScreen()));
+                      }
+                      boardController.nextPage(
+                        duration: Duration(milliseconds: 750),
+                        curve: Curves.fastLinearToSlowEaseIn,
+                      );
+                    },
+                    child: Icon(Icons.arrow_forward_ios),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
