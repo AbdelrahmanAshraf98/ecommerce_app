@@ -1,12 +1,12 @@
 import 'package:conditional/conditional.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shop_app/layouts/home_layout.dart';
 import 'package:shop_app/modules/login/cubit/cubit.dart';
 import 'package:shop_app/modules/login/cubit/states.dart';
-import 'package:shop_app/modules/register_screen/register_screen.dart';
+import 'package:shop_app/modules/register/register_screen.dart';
 import 'package:shop_app/shared/components/components.dart';
+import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
 import 'package:shop_app/shared/styles/color.dart';
 
@@ -25,11 +25,13 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if(state is LoginSuccessState){
             if(state.loginModel.status == true){
-              print('tmam');
+              print(state.loginModel.data.token);
               CacheHelper.saveData(key: 'token', value: state.loginModel.data.token)
-                  .then((value) =>  navigateAndFinish(context,Home()));
+                  .then((value) {
+                    token = state.loginModel.data.token;
+                navigateAndFinish(context, Home());
+              });
             }else{
-              print('msh tmam');
               showToast(msg: state.loginModel.message, state: ToastStates.error);
             }
           }
@@ -103,6 +105,7 @@ class LoginScreen extends StatelessWidget {
                                   LoginCubit.get(context).userLogin(
                                     mail: emailController.text,
                                     password: passwordController.text,
+                                    context: context
                                   );
                                 }
                               }),

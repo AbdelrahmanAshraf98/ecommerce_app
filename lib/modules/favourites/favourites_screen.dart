@@ -6,6 +6,7 @@ import 'package:shop_app/layouts/cubit/cubit.dart';
 import 'package:shop_app/layouts/cubit/states.dart';
 import 'package:shop_app/models/favourites_model.dart';
 import 'package:shop_app/shared/components/components.dart';
+import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/styles/color.dart';
 
 class FavouritesScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class FavouritesScreen extends StatelessWidget {
       builder: (context, state) {
         return ConditionalBuilder(
           condition: HomeCubit.get(context).favouritesModel != null,
-          builder: (context) =>HomeCubit.get(context).favouritesModel.data.items.length==0
+          builder: (context) => HomeCubit.get(context).favouritesModel.data.items.length == 0
               ? emptyFav() : ListView.separated(
               physics: BouncingScrollPhysics(),
               itemBuilder: (context, index) => buildFavItem(

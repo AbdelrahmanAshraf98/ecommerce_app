@@ -18,7 +18,6 @@ void main() async {
   await CacheHelper.init();
   bool onBoarding = CacheHelper.getData(key: 'onBoard');
   token = CacheHelper.getData(key: 'token');
-  print(token);
   Widget widgetScreen;
   if (onBoarding != null) {
     if (token != null)
@@ -41,7 +40,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit()..getHomeData()..getCategoriesData()..getFavouritesData(),
+      create: (context) => HomeCubit()
+        ..getHomeData()
+        ..getCategoriesData()
+        ..getFavouritesData()
+        ..getUserData(),
       child: MaterialApp(
         theme: ThemeData(
             fontFamily: 'Jannah',

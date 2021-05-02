@@ -9,6 +9,7 @@ import 'package:shop_app/layouts/cubit/states.dart';
 import 'package:shop_app/models/categories_model.dart';
 import 'package:shop_app/models/home_model.dart';
 import 'package:shop_app/shared/components/components.dart';
+import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/styles/color.dart';
 
 class ProductScreen extends StatelessWidget {

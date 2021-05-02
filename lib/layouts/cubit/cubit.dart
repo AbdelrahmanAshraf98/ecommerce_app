@@ -5,10 +5,11 @@ import 'package:shop_app/layouts/cubit/states.dart';
 import 'package:shop_app/models/categories_model.dart';
 import 'package:shop_app/models/favourites_model.dart';
 import 'package:shop_app/models/home_model.dart';
+import 'package:shop_app/models/login_model.dart';
 import 'package:shop_app/modules/categories/categories_screen.dart';
 import 'package:shop_app/modules/favourites/favourites_screen.dart';
 import 'package:shop_app/modules/products/products_screen.dart';
-import 'package:shop_app/modules/settings/settings_screen.dart';
+import 'package:shop_app/modules/profile/profile_screen.dart';
 import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
 
@@ -23,7 +24,7 @@ class HomeCubit extends Cubit<HomeStates> {
     ProductScreen(),
     CategoriesScreen(),
     FavouritesScreen(),
-    SettingsScreen(),
+    ProfileScreen(),
   ];
 
   void changeBottom(int index) {
@@ -78,7 +79,6 @@ class HomeCubit extends Cubit<HomeStates> {
       token: token,
     ).then((value) {
       favouritesModel = FavouritesModel.fromJson(value.data);
-      // print(favouritesModel.data.items[0].product.name);
       emit(FavouritesSuccessDataState());
     }).catchError((error) {
       print(error.toString());
@@ -104,4 +104,45 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(ChangeFavErrorDataState());
     });
   }
+
+  LoginModel userModel;
+  void getUserData() {
+    emit(UserLoadingDataState());
+    DioHelper.getData(
+      url: 'profile',
+      token: token,
+    ).then((value) {
+      userModel = LoginModel.fromJson(value.data);
+      emit(UserSuccessDataState(userModel));
+    }).catchError((error) {
+      print(error.toString());
+      emit(UserErrorDataState());
+    });
+  }
+
+  void updateUserData({
+    @required String name,
+    @required String email,
+    @required String phone,
+}) {
+    emit(UserLoadingUpdateDataState());
+    DioHelper.putData(
+      url: 'update-profile',
+      data: {
+        'name':name,
+        'email':email,
+        'phone':phone,
+      },
+      token: token,
+    ).then((value) {
+      userModel = LoginModel.fromJson(value.data);
+      emit(UserSuccessUpdateDataState(userModel));
+    }).catchError((error) {
+      print(error.toString());
+      emit(UserErrorUpdateDataState());
+    });
+  }
+
+
+
 }
